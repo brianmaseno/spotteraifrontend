@@ -105,15 +105,18 @@ function HomePage() {
       const tripData = {
         current_location: {
           lat: parseFloat(formData.currentLat),
-          lon: parseFloat(formData.currentLon)
+          lon: parseFloat(formData.currentLon),
+          address: formData.currentAddress
         },
         pickup_location: {
           lat: parseFloat(formData.pickupLat),
-          lon: parseFloat(formData.pickupLon)
+          lon: parseFloat(formData.pickupLon),
+          address: formData.pickupAddress
         },
         dropoff_location: {
           lat: parseFloat(formData.dropoffLat),
-          lon: parseFloat(formData.dropoffLon)
+          lon: parseFloat(formData.dropoffLon),
+          address: formData.dropoffAddress
         },
         current_cycle_used: parseFloat(formData.cycleUsed),
         driver_name: formData.driverName,
@@ -152,8 +155,19 @@ function HomePage() {
 
       <div className="form-container">
         <div className="form-card">
-          <h2>Plan Your Trip</h2>
-          <p className="form-subtitle">Enter your trip details to get HOS-compliant route planning</p>
+          <div className="form-card-header">
+            <div>
+              <h2>Plan Your Trip</h2>
+              <p className="form-subtitle">Enter your trip details to get HOS-compliant route planning</p>
+            </div>
+            <button 
+              type="button"
+              onClick={() => navigate('/history')} 
+              className="history-link-btn"
+            >
+              View History
+            </button>
+          </div>
 
           <form onSubmit={handleSubmit}>
             {/* Current Location */}

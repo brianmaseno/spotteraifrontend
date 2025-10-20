@@ -23,8 +23,16 @@ export const tripAPI = {
   },
 
   // List trips
-  listTrips: async () => {
-    const response = await apiClient.get('/trips/');
+  listTrips: async (limit = 50) => {
+    const response = await apiClient.get('/trips/list/', {
+      params: { limit }
+    });
+    return response.data;
+  },
+
+  // Delete trip
+  deleteTrip: async (tripId) => {
+    const response = await apiClient.delete(`/trips/${tripId}/delete/`);
     return response.data;
   },
 

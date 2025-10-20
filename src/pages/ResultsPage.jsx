@@ -16,6 +16,7 @@ function ResultsPage() {
       navigate('/');
       return;
     }
+    // Trip is already saved to MongoDB by the backend
   }, [tripResult, navigate]);
 
   const downloadPDF = async () => {
@@ -36,7 +37,29 @@ function ResultsPage() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (err) {
-      alert('Failed to download PDF. Please try again.');
+      let errorMessage = 'Failed to download PDF. ';
+      
+      if (err.response?.data) {
+        try {
+          // Try to parse error response if it's JSON
+          const reader = new FileReader();
+          reader.onload = () => {
+            try {
+              const errorData = JSON.parse(reader.result);
+              console.error('Server error:', errorData);
+              alert(errorMessage + (errorData.error || 'Please try again.'));
+            } catch {
+              alert(errorMessage + 'Please try again.');
+            }
+          };
+          reader.readAsText(err.response.data);
+        } catch {
+          alert(errorMessage + 'Please try again.');
+        }
+      } else {
+        alert(errorMessage + 'Please check your connection and try again.');
+      }
+      
       console.error('Error downloading PDF:', err);
     } finally {
       setDownloading(false);
@@ -73,11 +96,68 @@ function ResultsPage() {
 
       mapInstanceRef.current = map;
 
-      map.events.add('ready', () => {
+      map.events.add('ready', async () => {
         // Add data source for route
         const dataSource = new window.atlas.source.DataSource();
         map.sources.add(dataSource);
 
+        // Fetch real driving route from Azure Maps Route API
+        const subscriptionKey = import.meta.env.VITE_AZURE_MAPS_KEY;
+        const routeUrl = `https://atlas.microsoft.com/route/directions/json?api-version=1.0&subscription-key=${subscriptionKey}&query=${currentLoc[1]},${currentLoc[0]}:${pickupLoc[1]},${pickupLoc[0]}:${dropoffLoc[1]},${dropoffLoc[0]}`;
+
+        try {
+          const response = await fetch(routeUrl);
+          const routeData = await response.json();
+
+          if (routeData.routes && routeData.routes.length > 0) {
+            // Extract route coordinates
+            const routeCoordinates = [];
+            routeData.routes[0].legs.forEach(leg => {
+              leg.points.forEach(point => {
+                routeCoordinates.push([point.longitude, point.latitude]);
+              });
+            });
+
+            // Add the actual route line
+            const routeLine = new window.atlas.data.LineString(routeCoordinates);
+            dataSource.add(new window.atlas.data.Feature(routeLine));
+
+            // Add route layer with gradient effect
+            map.layers.add(new window.atlas.layer.LineLayer(dataSource, 'route-layer', {
+              strokeColor: [
+                'interpolate',
+                ['linear'],
+                ['line-progress'],
+                0, '#121b45',
+                0.5, '#1a2859',
+                1, '#2563eb'
+              ],
+              strokeWidth: 6,
+              lineGradient: true
+            }));
+          } else {
+            // Fallback to straight line if route API fails
+            const routeLine = new window.atlas.data.LineString([currentLoc, pickupLoc, dropoffLoc]);
+            dataSource.add(new window.atlas.data.Feature(routeLine));
+
+            map.layers.add(new window.atlas.layer.LineLayer(dataSource, null, {
+              strokeColor: '#121b45',
+              strokeWidth: 5
+            }));
+          }
+        } catch (error) {
+          console.error('Error fetching route:', error);
+          // Fallback to straight line
+          const routeLine = new window.atlas.data.LineString([currentLoc, pickupLoc, dropoffLoc]);
+          dataSource.add(new window.atlas.data.Feature(routeLine));
+
+          map.layers.add(new window.atlas.layer.LineLayer(dataSource, null, {
+            strokeColor: '#121b45',
+            strokeWidth: 5
+          }));
+        }
+
+        // Add markers for locations
         // Add markers for locations
         dataSource.add([
           new window.atlas.data.Feature(new window.atlas.data.Point(currentLoc), {
@@ -94,15 +174,9 @@ function ResultsPage() {
           })
         ]);
 
-        // Create route line
-        const routeLine = new window.atlas.data.LineString([currentLoc, pickupLoc, dropoffLoc]);
-        dataSource.add(new window.atlas.data.Feature(routeLine));
+        // Create route line - Removed duplicate (now handled above with real route)
 
-        // Add route layer
-        map.layers.add(new window.atlas.layer.LineLayer(dataSource, null, {
-          strokeColor: '#2563eb',
-          strokeWidth: 5
-        }));
+        // Add route layer - Removed duplicate (now handled above)
 
         // Add symbol layer for markers
         map.layers.add(new window.atlas.layer.SymbolLayer(dataSource, null, {
@@ -178,6 +252,9 @@ function ResultsPage() {
             </button>
             <button onClick={() => navigate('/')} className="new-trip-btn">
               Calculate New Trip
+            </button>
+            <button onClick={() => navigate('/history')} className="history-btn">
+              View History
             </button>
           </div>
         </div>

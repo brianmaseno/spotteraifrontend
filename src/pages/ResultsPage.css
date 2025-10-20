@@ -35,7 +35,8 @@
 }
 
 .download-btn,
-.new-trip-btn {
+.new-trip-btn,
+.history-btn {
   padding: 0.875rem 1.75rem;
   border: none;
   border-radius: 12px;
@@ -65,14 +66,16 @@
   cursor: not-allowed;
 }
 
-.new-trip-btn {
+.new-trip-btn,
+.history-btn {
   background: rgba(255, 255, 255, 0.2);
   color: white;
   border: 2px solid white;
   backdrop-filter: blur(10px);
 }
 
-.new-trip-btn:hover {
+.new-trip-btn:hover,
+.history-btn:hover {
   background: white;
   color: #121b45;
   transform: translateY(-2px);

@@ -1,0 +1,357 @@
+/* History Page Styles */
+
+.history-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 2rem 0;
+}
+
+.history-header {
+  background: linear-gradient(135deg, #121b45 0%, #1a2859 100%);
+  color: white;
+  padding: 3rem 2rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 4px 20px rgba(18, 27, 69, 0.3);
+}
+
+.header-content h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.header-content p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.new-trip-btn, .clear-btn {
+  padding: 0.875rem 1.5rem;
+  border: 2px solid white;
+  background: transparent;
+  color: white;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.new-trip-btn:hover {
+  background: white;
+  color: #121b45;
+}
+
+.clear-btn {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.clear-btn:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.history-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  gap: 1rem;
+}
+
+.loading-container .spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(18, 27, 69, 0.2);
+  border-top-color: #121b45;
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  gap: 1rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.error-icon {
+  font-size: 5rem;
+  opacity: 0.5;
+}
+
+.error-container h2 {
+  color: #121b45;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.error-container p {
+  color: #64748b;
+  font-size: 1.1rem;
+  max-width: 500px;
+}
+
+.retry-btn {
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #121b45 0%, #1a2859 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.retry-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(18, 27, 69, 0.3);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.empty-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-state h2 {
+  font-size: 2rem;
+  color: #121b45;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin-bottom: 2rem;
+}
+
+.empty-cta {
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #121b45 0%, #1a2859 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.empty-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(18, 27, 69, 0.3);
+}
+
+.trips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 2rem;
+}
+
+.trip-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.trip-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.trip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.trip-date {
+  font-size: 0.95rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.delete-btn {
+  background: #fee2e2;
+  color: #ef4444;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  line-height: 1;
+}
+
+.delete-btn:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.trip-details {
+  flex: 1;
+  margin-bottom: 1.5rem;
+}
+
+.trip-route {
+  margin-bottom: 1.5rem;
+}
+
+.location-item {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.location-label {
+  font-weight: 700;
+  color: #121b45;
+  min-width: 70px;
+}
+
+.location-text {
+  color: #475569;
+  flex: 1;
+}
+
+.route-arrow {
+  text-align: center;
+  color: #121b45;
+  font-size: 1.2rem;
+  margin: 0.25rem 0;
+}
+
+.trip-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 8px;
+}
+
+.summary-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.stat-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #121b45;
+}
+
+.trip-driver {
+  color: #475569;
+  font-size: 0.95rem;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.trip-driver strong {
+  color: #121b45;
+}
+
+.view-btn {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #121b45 0%, #1a2859 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.view-btn:hover {
+  background: linear-gradient(135deg, #0d1229 0%, #121b45 100%);
+  box-shadow: 0 4px 16px rgba(18, 27, 69, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .history-page {
+    padding: 1rem 0;
+  }
+
+  .history-header {
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .header-content h1 {
+    font-size: 2rem;
+  }
+
+  .header-content p {
+    font-size: 1rem;
+  }
+
+  .header-actions {
+    flex-direction: column;
+  }
+
+  .trips-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .trip-card {
+    padding: 1.5rem;
+  }
+
+  .trip-summary {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}

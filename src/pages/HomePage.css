@@ -88,6 +88,32 @@
   margin-bottom: 4rem;
 }
 
+.form-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.history-link-btn {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: #121b45;
+  border: 2px solid #121b45;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.history-link-btn:hover {
+  background: #121b45;
+  color: white;
+}
+
 .form-card h2 {
   font-size: 2rem;
   color: #121b45;
@@ -308,6 +334,15 @@
   .form-card {
     padding: 1.5rem;
     border-radius: 16px;
+  }
+
+  .form-card-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .history-link-btn {
+    width: 100%;
   }
 
   .form-row {
