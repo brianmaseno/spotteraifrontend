@@ -1,0 +1,485 @@
+/* ResultsPage Styles - Professional Blue Theme */
+
+.results-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.results-header {
+  background: linear-gradient(135deg, #121b45 0%, #1a2859 100%);
+  color: white;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(18, 27, 69, 0.3);
+}
+
+.header-content {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.header-content h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.download-btn,
+.new-trip-btn {
+  padding: 0.875rem 1.75rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.download-btn {
+  background: white;
+  color: #121b45;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.download-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+}
+
+.download-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.new-trip-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid white;
+  backdrop-filter: blur(10px);
+}
+
+.new-trip-btn:hover {
+  background: white;
+  color: #121b45;
+  transform: translateY(-2px);
+}
+
+/* Main Layout: Map + Details Side by Side */
+.results-layout {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Map Section - Left Half */
+.map-section {
+  position: sticky;
+  top: 2rem;
+}
+
+.map-card {
+  background: white;
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.map-card h2 {
+  font-size: 1.5rem;
+  color: #121b45;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.map-container {
+  width: 100%;
+  height: 70vh;
+  min-height: 600px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Details Section - Right Half */
+.details-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.details-section > div {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.details-section h2 {
+  font-size: 1.5rem;
+  color: #121b45;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+/* Summary Card */
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 16px;
+  border: 2px solid #dee2e6;
+}
+
+.summary-icon {
+  font-size: 2rem;
+  filter: grayscale(0);
+}
+
+.summary-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.summary-item .label {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.summary-item .value {
+  font-size: 1.5rem;
+  color: #1e293b;
+  font-weight: 700;
+}
+
+/* HOS Compliance Card */
+.compliance-card {
+  border-left: 5px solid;
+}
+
+.compliance-card.compliant {
+  border-left-color: #10b981;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+}
+
+.compliance-card.violation {
+  border-left-color: #ef4444;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
+}
+
+.compliance-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.compliance-card.compliant .compliance-status {
+  color: #059669;
+}
+
+.compliance-card.violation .compliance-status {
+  color: #dc2626;
+}
+
+.status-icon {
+  font-size: 1.5rem;
+}
+
+.violations-list {
+  margin-top: 1rem;
+  padding-left: 1.5rem;
+}
+
+.violations-list li {
+  color: #991b1b;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+/* Schedule Card */
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.schedule-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.schedule-list::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 8px;
+}
+
+.schedule-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+}
+
+.schedule-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.schedule-item {
+  padding: 1.25rem;
+  border-radius: 12px;
+  border-left: 4px solid;
+  background: #f8fafc;
+  transition: all 0.3s ease;
+}
+
+.schedule-item:hover {
+  background: #f1f5f9;
+  transform: translateX(4px);
+}
+
+.schedule-item.driving {
+  border-left-color: #121b45;
+  background: linear-gradient(90deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.schedule-item.on_duty {
+  border-left-color: #f59e0b;
+  background: linear-gradient(90deg, #fffbeb 0%, #f8fafc 100%);
+}
+
+.schedule-item.off_duty {
+  border-left-color: #10b981;
+  background: linear-gradient(90deg, #f0fdf4 0%, #f8fafc 100%);
+}
+
+.schedule-item.sleeper_berth {
+  border-left-color: #8b5cf6;
+  background: linear-gradient(90deg, #f5f3ff 0%, #f8fafc 100%);
+}
+
+.schedule-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.schedule-time {
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.125rem;
+}
+
+.schedule-duration {
+  background: white;
+  padding: 0.375rem 0.875rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #121b45;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.schedule-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.schedule-activity {
+  color: #121b45;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.schedule-description {
+  color: #475569;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.schedule-distance {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  background: white;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+/* Daily Logs Card */
+.daily-log {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+  border: 2px solid #e2e8f0;
+}
+
+.daily-log:last-child {
+  margin-bottom: 0;
+}
+
+.daily-log h3 {
+  color: #121b45;
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.log-summary {
+  margin-bottom: 1rem;
+}
+
+.log-miles {
+  background: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #121b45;
+  display: inline-block;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.log-totals {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.log-stat {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  border-left: 4px solid;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.log-stat.driving {
+  border-left-color: #121b45;
+}
+
+.log-stat.on-duty {
+  border-left-color: #f59e0b;
+}
+
+.log-stat.off-duty {
+  border-left-color: #10b981;
+}
+
+.log-stat.sleeper {
+  border-left-color: #8b5cf6;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .results-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .map-section {
+    position: relative;
+    top: 0;
+  }
+
+  .map-container {
+    height: 50vh;
+    min-height: 400px;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .log-totals {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .results-header {
+    padding: 1.5rem;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-content h1 {
+    font-size: 1.5rem;
+  }
+
+  .header-actions {
+    flex-direction: column;
+  }
+
+  .download-btn,
+  .new-trip-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .results-layout {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .details-section > div {
+    padding: 1.25rem;
+  }
+
+  .log-totals {
+    grid-template-columns: 1fr;
+  }
+}
