@@ -6,10 +6,13 @@ function App() {
   const [formData, setFormData] = useState({
     currentLat: '',
     currentLon: '',
+    currentAddress: '',
     pickupLat: '',
     pickupLon: '',
+    pickupAddress: '',
     dropoffLat: '',
     dropoffLon: '',
+    dropoffAddress: '',
     cycleUsed: '',
     driverName: '',
     carrierName: '',
@@ -17,11 +20,24 @@ function App() {
     vehicleNumber: '',
   });
 
+  const [searchResults, setSearchResults] = useState({
+    current: [],
+    pickup: [],
+    dropoff: []
+  });
+  
+  const [showSuggestions, setShowSuggestions] = useState({
+    current: false,
+    pickup: false,
+    dropoff: false
+  });
+
   const [tripResult, setTripResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
+  const searchTimeoutRef = useRef(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,6 +45,57 @@ function App() {
       ...prev,
       [name]: value
     }));
+  };
+
+  // Azure Maps Search for location autocomplete
+  const searchLocation = async (query, locationType) => {
+    if (!query || query.length < 3) {
+      setSearchResults(prev => ({ ...prev, [locationType]: [] }));
+      setShowSuggestions(prev => ({ ...prev, [locationType]: false }));
+      return;
+    }
+
+    clearTimeout(searchTimeoutRef.current);
+    
+    searchTimeoutRef.current = setTimeout(async () => {
+      try {
+        const subscriptionKey = import.meta.env.VITE_AZURE_MAPS_KEY;
+        const url = `https://atlas.microsoft.com/search/address/json?api-version=1.0&subscription-key=${subscriptionKey}&query=${encodeURIComponent(query)}&limit=5`;
+        
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.results && data.results.length > 0) {
+          setSearchResults(prev => ({ ...prev, [locationType]: data.results }));
+          setShowSuggestions(prev => ({ ...prev, [locationType]: true }));
+        }
+      } catch (error) {
+        console.error('Error searching location:', error);
+      }
+    }, 300);
+  };
+
+  const handleLocationSearch = (e, locationType) => {
+    const value = e.target.value;
+    setFormData(prev => ({
+      ...prev,
+      [`${locationType}Address`]: value
+    }));
+    searchLocation(value, locationType);
+  };
+
+  const selectLocation = (result, locationType) => {
+    const { position, address } = result;
+    
+    setFormData(prev => ({
+      ...prev,
+      [`${locationType}Lat`]: position.lat,
+      [`${locationType}Lon`]: position.lon,
+      [`${locationType}Address`]: address.freeformAddress || `${position.lat}, ${position.lon}`
+    }));
+    
+    setShowSuggestions(prev => ({ ...prev, [locationType]: false }));
+    setSearchResults(prev => ({ ...prev, [locationType]: [] }));
   };
 
   const handleSubmit = async (e) => {
@@ -199,70 +266,109 @@ function App() {
         <div className="form-section">
           <h2>Trip Details</h2>
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
+            <div className="form-group location-search">
               <h3>Current Location</h3>
-              <input
-                type="number"
-                step="any"
-                name="currentLat"
-                placeholder="Latitude"
-                value={formData.currentLat}
-                onChange={handleInputChange}
-                required
-              />
-              <input
-                type="number"
-                step="any"
-                name="currentLon"
-                placeholder="Longitude"
-                value={formData.currentLon}
-                onChange={handleInputChange}
-                required
-              />
+              <div className="search-input-wrapper">
+                <input
+                  type="text"
+                  name="currentAddress"
+                  placeholder="Search for address or place..."
+                  value={formData.currentAddress}
+                  onChange={(e) => handleLocationSearch(e, 'current')}
+                  autoComplete="off"
+                />
+                {showSuggestions.current && searchResults.current.length > 0 && (
+                  <div className="suggestions-dropdown">
+                    {searchResults.current.map((result, index) => (
+                      <div
+                        key={index}
+                        className="suggestion-item"
+                        onClick={() => selectLocation(result, 'current')}
+                      >
+                        <div className="suggestion-title">{result.address.freeformAddress}</div>
+                        <div className="suggestion-subtitle">
+                          {result.address.country} • {result.position.lat.toFixed(4)}, {result.position.lon.toFixed(4)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="coordinates-display">
+                {formData.currentLat && formData.currentLon && (
+                  <small>📍 {formData.currentLat.toFixed(4)}, {formData.currentLon.toFixed(4)}</small>
+                )}
+              </div>
             </div>
 
-            <div className="form-group">
+            <div className="form-group location-search">
               <h3>Pickup Location</h3>
-              <input
-                type="number"
-                step="any"
-                name="pickupLat"
-                placeholder="Latitude"
-                value={formData.pickupLat}
-                onChange={handleInputChange}
-                required
-              />
-              <input
-                type="number"
-                step="any"
-                name="pickupLon"
-                placeholder="Longitude"
-                value={formData.pickupLon}
-                onChange={handleInputChange}
-                required
-              />
+              <div className="search-input-wrapper">
+                <input
+                  type="text"
+                  name="pickupAddress"
+                  placeholder="Search for address or place..."
+                  value={formData.pickupAddress}
+                  onChange={(e) => handleLocationSearch(e, 'pickup')}
+                  autoComplete="off"
+                />
+                {showSuggestions.pickup && searchResults.pickup.length > 0 && (
+                  <div className="suggestions-dropdown">
+                    {searchResults.pickup.map((result, index) => (
+                      <div
+                        key={index}
+                        className="suggestion-item"
+                        onClick={() => selectLocation(result, 'pickup')}
+                      >
+                        <div className="suggestion-title">{result.address.freeformAddress}</div>
+                        <div className="suggestion-subtitle">
+                          {result.address.country} • {result.position.lat.toFixed(4)}, {result.position.lon.toFixed(4)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="coordinates-display">
+                {formData.pickupLat && formData.pickupLon && (
+                  <small>📍 {formData.pickupLat.toFixed(4)}, {formData.pickupLon.toFixed(4)}</small>
+                )}
+              </div>
             </div>
 
-            <div className="form-group">
+            <div className="form-group location-search">
               <h3>Dropoff Location</h3>
-              <input
-                type="number"
-                step="any"
-                name="dropoffLat"
-                placeholder="Latitude"
-                value={formData.dropoffLat}
-                onChange={handleInputChange}
-                required
-              />
-              <input
-                type="number"
-                step="any"
-                name="dropoffLon"
-                placeholder="Longitude"
-                value={formData.dropoffLon}
-                onChange={handleInputChange}
-                required
-              />
+              <div className="search-input-wrapper">
+                <input
+                  type="text"
+                  name="dropoffAddress"
+                  placeholder="Search for address or place..."
+                  value={formData.dropoffAddress}
+                  onChange={(e) => handleLocationSearch(e, 'dropoff')}
+                  autoComplete="off"
+                />
+                {showSuggestions.dropoff && searchResults.dropoff.length > 0 && (
+                  <div className="suggestions-dropdown">
+                    {searchResults.dropoff.map((result, index) => (
+                      <div
+                        key={index}
+                        className="suggestion-item"
+                        onClick={() => selectLocation(result, 'dropoff')}
+                      >
+                        <div className="suggestion-title">{result.address.freeformAddress}</div>
+                        <div className="suggestion-subtitle">
+                          {result.address.country} • {result.position.lat.toFixed(4)}, {result.position.lon.toFixed(4)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="coordinates-display">
+                {formData.dropoffLat && formData.dropoffLon && (
+                  <small>📍 {formData.dropoffLat.toFixed(4)}, {formData.dropoffLon.toFixed(4)}</small>
+                )}
+              </div>
             </div>
 
             <div className="form-group">
