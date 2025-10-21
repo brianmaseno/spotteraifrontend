@@ -83,10 +83,17 @@ function ResultsPage() {
       const pickupLoc = [parseFloat(formData.pickupLon), parseFloat(formData.pickupLat)];
       const dropoffLoc = [parseFloat(formData.dropoffLon), parseFloat(formData.dropoffLat)];
 
-      // Initialize map
+      // Calculate bounding box for initial view
+      const bounds = window.atlas.data.BoundingBox.fromLatLngs([
+        [currentLoc[1], currentLoc[0]],
+        [pickupLoc[1], pickupLoc[0]],
+        [dropoffLoc[1], dropoffLoc[0]]
+      ]);
+
+      // Initialize map with camera focused on route
       const map = new window.atlas.Map(mapRef.current, {
-        center: currentLoc,
-        zoom: 5,
+        bounds: bounds,
+        padding: 80,
         language: 'en-US',
         authOptions: {
           authType: 'subscriptionKey',
@@ -205,13 +212,6 @@ function ResultsPage() {
             }));
           }
         });
-
-        // Fit map to show all markers
-        const bounds = window.atlas.data.BoundingBox.fromData([currentLoc, pickupLoc, dropoffLoc]);
-        map.setCamera({
-          bounds: bounds,
-          padding: 80
-        });
       });
     }
 
@@ -307,6 +307,35 @@ function ResultsPage() {
             </div>
           </div>
 
+          {/* Weekly Hours Status (if available) */}
+          {tripResult.weekly_hours && (
+            <div className="weekly-hours-card">
+              <h2>Weekly Hours of Service</h2>
+              <div className="weekly-hours-content">
+                <div className="hours-info">
+                  <span className="hours-label">Mode:</span>
+                  <span className="hours-value">{tripResult.weekly_hours.mode}</span>
+                </div>
+                <div className="hours-info">
+                  <span className="hours-label">Hours Used:</span>
+                  <span className="hours-value">{tripResult.weekly_hours.hours_used.toFixed(1)} hours</span>
+                </div>
+                <div className="hours-info">
+                  <span className="hours-label">Remaining:</span>
+                  <span className="hours-value available">{tripResult.weekly_hours.hours_remaining.toFixed(1)} hours</span>
+                </div>
+                {tripResult.weekly_hours.hours_after_trip !== undefined && (
+                  <div className="hours-info">
+                    <span className="hours-label">After Trip:</span>
+                    <span className={`hours-value ${tripResult.weekly_hours.hours_after_trip < 5 ? 'warning' : ''}`}>
+                      {tripResult.weekly_hours.hours_after_trip.toFixed(1)} hours
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* HOS Compliance Status */}
           <div className={`compliance-card ${tripResult.hos_compliance.compliant ? 'compliant' : 'violation'}`}>
             <h2>HOS Compliance Status</h2>
@@ -343,10 +372,25 @@ function ResultsPage() {
                       {new Date(item.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                     <span className="schedule-duration">{item.duration_hours.toFixed(2)} hrs</span>
+                    {item.split_sleeper_segment && (
+                      <span className="split-sleeper-badge">
+                        Split Sleeper {item.split_sleeper_segment}
+                      </span>
+                    )}
                   </div>
                   <div className="schedule-body">
                     <strong className="schedule-activity">{item.activity}</strong>
                     <p className="schedule-description">{item.description}</p>
+                    {item.location_info && (
+                      <div className="location-info">
+                        <span className="location-icon">📍</span>
+                        <span className="location-text">
+                          {item.location_info.city && item.location_info.state 
+                            ? `${item.location_info.city}, ${item.location_info.state}`
+                            : item.location_info.state || 'Location available'}
+                        </span>
+                      </div>
+                    )}
                     {item.distance_miles && (
                       <span className="schedule-distance">{item.distance_miles.toFixed(1)} miles</span>
                     )}

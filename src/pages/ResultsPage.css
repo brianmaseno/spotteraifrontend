@@ -83,26 +83,32 @@
 
 /* Main Layout: Map + Details Side by Side */
 .results-layout {
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 2rem;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  align-items: start;
+  grid-template-columns: 50% 50%;
+  gap: 0;
+  align-items: stretch;
+  min-height: calc(100vh - 120px);
 }
 
-/* Map Section - Left Half */
+/* Map Section - Left Half (Vertical Full Height) */
 .map-section {
   position: sticky;
-  top: 2rem;
+  top: 0;
+  height: calc(100vh - 120px);
+  overflow: hidden;
 }
 
 .map-card {
   background: white;
-  border-radius: 20px;
+  border-radius: 0;
   padding: 1.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.05);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .map-card h2 {
@@ -110,13 +116,13 @@
   color: #121b45;
   margin-bottom: 1rem;
   font-weight: 700;
+  flex-shrink: 0;
 }
 
 .map-container {
   width: 100%;
-  height: 70vh;
-  min-height: 600px;
-  border-radius: 16px;
+  flex: 1;
+  border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
@@ -126,6 +132,9 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  padding: 2rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 120px);
 }
 
 .details-section > div {
@@ -424,23 +433,119 @@
   color: #1e293b;
 }
 
+/* Split Sleeper Badge */
+.split-sleeper-badge {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
+
+/* Location Info */
+.location-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-radius: 8px;
+  border-left: 3px solid #0ea5e9;
+}
+
+.location-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.location-text {
+  font-size: 0.875rem;
+  color: #0c4a6e;
+  font-weight: 500;
+}
+
+/* Weekly Hours Card */
+.weekly-hours-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #2563eb;
+}
+
+.weekly-hours-card h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.weekly-hours-content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.hours-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.hours-label {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.hours-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.hours-value.available {
+  color: #10b981;
+}
+
+.hours-value.warning {
+  color: #f59e0b;
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
   .results-layout {
     grid-template-columns: 1fr;
+    min-height: auto;
   }
 
   .map-section {
     position: relative;
     top: 0;
-  }
-
-  .map-container {
-    height: 50vh;
+    height: 60vh;
     min-height: 400px;
   }
 
+  .details-section {
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .map-card {
+    border-radius: 16px;
+    margin: 1rem;
+  }
+
   .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .weekly-hours-content {
     grid-template-columns: 1fr;
   }
 

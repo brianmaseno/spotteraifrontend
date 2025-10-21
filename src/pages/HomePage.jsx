@@ -20,6 +20,11 @@ function HomePage() {
     carrierName: '',
     mainOffice: '',
     vehicleNumber: '',
+    // New HOS compliance fields
+    weeklyMode: '70/8',
+    useSplitSleeper: false,
+    useAdverseConditions: false,
+    useAirMileException: false,
   });
 
   const [searchResults, setSearchResults] = useState({
@@ -39,10 +44,10 @@ function HomePage() {
   const searchTimeoutRef = useRef(null);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
@@ -123,6 +128,11 @@ function HomePage() {
         carrier_name: formData.carrierName,
         main_office: formData.mainOffice,
         vehicle_number: formData.vehicleNumber,
+        // New HOS compliance fields
+        weekly_mode: formData.weeklyMode,
+        use_split_sleeper: formData.useSplitSleeper,
+        use_adverse_conditions: formData.useAdverseConditions,
+        use_air_mile_exception: formData.useAirMileException,
       };
 
       const result = await tripAPI.planTrip(tripData);
@@ -356,6 +366,72 @@ function HomePage() {
                   onChange={handleInputChange}
                   required
                 />
+              </div>
+            </div>
+
+            {/* HOS Compliance Options - NEW */}
+            <div className="form-section hos-options">
+              <h3>Hours of Service Options</h3>
+              
+              <div className="form-group">
+                <label>Weekly Hours Limit</label>
+                <select
+                  name="weeklyMode"
+                  value={formData.weeklyMode}
+                  onChange={handleInputChange}
+                  className="select-input"
+                >
+                  <option value="70/8">70 hours in 8 days (Standard)</option>
+                  <option value="60/7">60 hours in 7 days</option>
+                </select>
+                <small className="field-help">Select your company's operating schedule</small>
+              </div>
+
+              <div className="hos-checkboxes">
+                <div className="checkbox-group">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      name="useSplitSleeper"
+                      checked={formData.useSplitSleeper}
+                      onChange={handleInputChange}
+                    />
+                    <span className="checkbox-text">
+                      <strong>Use Split Sleeper Berth</strong>
+                      <small>Divide 10-hour rest into 7+3 or 8+2 hours without counting against 14-hour window</small>
+                    </span>
+                  </label>
+                </div>
+
+                <div className="checkbox-group">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      name="useAdverseConditions"
+                      checked={formData.useAdverseConditions}
+                      onChange={handleInputChange}
+                    />
+                    <span className="checkbox-text">
+                      <strong>Adverse Driving Conditions</strong>
+                      <small>Adds 2 hours of driving time for unexpected weather, accidents, or road conditions</small>
+                    </span>
+                  </label>
+                </div>
+
+                <div className="checkbox-group">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      name="useAirMileException"
+                      checked={formData.useAirMileException}
+                      onChange={handleInputChange}
+                    />
+                    <span className="checkbox-text">
+                      <strong>150 Air-Mile Short-Haul Exception</strong>
+                      <small>For drivers operating within 150 air-miles of their work reporting location</small>
+                    </span>
+                  </label>
+                </div>
               </div>
             </div>
 
